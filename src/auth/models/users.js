@@ -11,7 +11,7 @@ const userSchema = (sequelize, DataTypes) => {
     token: {
       type: DataTypes.VIRTUAL,
       get() {
-        return jwt.sign({ username: this.username }, process.env.SECRET);
+        return jwt.sign({ username: this.username }, process.env.SECRET, {expiresIn: 30});
       }
     }
   });
@@ -33,8 +33,14 @@ const userSchema = (sequelize, DataTypes) => {
   model.authenticateWithToken = async function (token) {
     try {
       const parsedContent = jwt.verify(token, process.env.SECRET);
-      const user = await this.findOne({ where: { username: parsedContent.username } })
-      if (user) { return user; }
+      const isExpired = false;
+      const currentTime = Date.now();
+      console.log('currentime', currentTime);
+      console.log('expiry', parsedContent.exp);
+      if (currentTime > parsedContent.exp) {
+        const user = await this.findOne({ where: { username: parsedContent.username } })
+        if (user) { return user; }
+      }
       throw new Error("User Not Found");
     } catch (e) {
       throw new Error(e.message)
