@@ -33,10 +33,7 @@ const userSchema = (sequelize, DataTypes) => {
   model.authenticateWithToken = async function (token) {
     try {
       const parsedContent = jwt.verify(token, process.env.SECRET);
-      const isExpired = false;
       const currentTime = Date.now();
-      console.log('currentime', currentTime);
-      console.log('expiry', parsedContent.exp);
       if (currentTime > parsedContent.exp) {
         const user = await this.findOne({ where: { username: parsedContent.username } })
         if (user) { return user; }
