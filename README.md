@@ -6,6 +6,8 @@ PR: https://github.com/yd24/bearer-auth/pull/1
 
 GitHub Actions: https://github.com/yd24/bearer-auth/actions
 
+![image](./Whiteboard.png)
+
 ## Notes
 To test:
 * Sign up an account first by sending a POST request to /signup endpoint and a { "username": "<username here>", "password":"<password here>"} in body.
